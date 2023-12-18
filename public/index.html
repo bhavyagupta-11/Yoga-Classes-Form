@@ -8,11 +8,11 @@
     <title>Yoga Classes Admission Form</title>
     <style>
         body {
-            background-color: #f8f9fa; /* Light gray background */
+            background-color: #f8f9fa;
         }
 
         .header {
-            background-color: rgb(4, 21, 4); /* Blue header background */
+            background-color: rgb(4, 21, 4); 
             color: #fff;
             padding: 5px;
             text-align: center;
@@ -21,14 +21,14 @@
         .dialog-box {
             max-width: 400px;
             margin: 50px auto;
-            background-color: #fff; /* White background */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+            background-color: #fff; 
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
             border-radius: 5px;
             padding: 20px;
         }
 
         .dialog-box-header {
-            background-color: #7bb4e6; /* Yellow background for header */
+            background-color: #7bb4e6; 
             color: #fff;
             font-weight: bold;
             padding: 10px;
@@ -40,9 +40,8 @@
             font-weight: bold;
         }
 
-        /* Add style for disabled buttons */
         button:disabled {
-            background-color: #6c757d !important; /* Grey color */
+            background-color: #6c757d !important; 
         }
     </style>
 </head>
@@ -106,7 +105,7 @@
                 paymentInput.removeAttribute('disabled');
                 payButton.removeAttribute('disabled');
                 submitButton.setAttribute('disabled', 'true');
-                paymentStatus.innerHTML = ''; // Clear payment status
+                paymentStatus.innerHTML = ''; 
             } else {
                 paymentInput.setAttribute('disabled', 'true');
                 payButton.setAttribute('disabled', 'true');
