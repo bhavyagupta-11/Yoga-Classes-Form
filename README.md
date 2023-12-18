@@ -71,13 +71,4 @@ This project is a Yoga Classes Registration that allows users to enroll in month
 2. Fill out the admission form and proceed with the payment process.
 3. View and manage registrations on the registrations page.
 
-## Contributing
 
-Feel free to contribute to this project by opening issues or creating pull requests. Follow the standard GitHub flow when contributing.
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-```
-
-Make sure to replace placeholder details such as `your-username` and customize the content based on your specific project requirements. Additionally, include a `LICENSE` file if you choose a license for your project.
