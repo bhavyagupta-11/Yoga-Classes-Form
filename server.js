@@ -56,7 +56,6 @@ app.post('/submit', async (req, res) => {
 app.post('/processPayment', (req, res) => {
     const { paymentAmount } = req.body;
 
-    // Mock payment processing (always return success for the demonstration)
     const paymentStatus = processPayment(paymentAmount);
 
     if (paymentStatus === 'success') {
@@ -67,11 +66,9 @@ app.post('/processPayment', (req, res) => {
 });
 
 function processPayment(amount) {
-    // For demonstration purposes, assuming payment is always successful
     return 'success';
 }
 
-// Route to render the registrations page
 app.get('/registrations', async (req, res) => {
     try {
         const registrations = await User.find().sort({ registrationDate: -1 });
