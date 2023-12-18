@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Registrations</title>
+    <style>
+        body {
+            background-color: #fff; /* White background */
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            color: #ffa200; /* Blue header color */
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+            border: 1px solid #060d13; /* Blue table border */
+        }
+
+        table caption {
+            text-align: center;
+            caption-side: top;
+            font-size: 1.5em;
+            color: #000; /* Black month header color */
+            background-color: #cbd2d9; /* Blue background for month header */
+            padding: 1px;
+        }
+
+        table th, table td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        table tbody tr:nth-child(odd) {
+            background-color: rgb(211, 234, 225); /* Green background for odd rows */
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #9cd9a9; /* Darker green background for even rows */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Registrations</h1>
+        <div id="registrationTables"></div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        // Fetch registrations from the server and populate the tables
+        async function fetchRegistrations() {
+            try {
+                const response = await fetch('/registrations');
+                const registrations = await response.json();
+
+                const registrationTablesContainer = document.getElementById('registrationTables');
+
+                // Group registrations by month
+                const groupedRegistrations = groupByMonth(registrations);
+
+                // Iterate over each month
+                for (const month in groupedRegistrations) {
+                    const monthRegistrations = groupedRegistrations[month];
+
+                    // Create a table for each month
+                    const monthTable = document.createElement('table');
+                    const monthTableCaption = document.createElement('caption');
+                    monthTableCaption.textContent = month;
+                    monthTable.appendChild(monthTableCaption);
+
+                    const monthHead = monthTable.createTHead();
+                    const headRow = monthHead.insertRow();
+                    headRow.insertCell().textContent = 'Name';
+                    headRow.insertCell().textContent = 'Batch';
+                    headRow.insertCell().textContent = 'Age';
+                    headRow.insertCell().textContent = 'Registration Date';
+
+                    const monthBody = monthTable.createTBody();
+                    monthTable.appendChild(monthBody);
+
+                    // Iterate over registrations in the current month
+                    monthRegistrations.forEach((registration) => {
+                        const row = monthBody.insertRow();
+                        row.insertCell().textContent = registration.name;
+                        row.insertCell().textContent = registration.selectedBatch;
+                        row.insertCell().textContent = registration.age;
+                        row.insertCell().textContent = new Date(registration.registrationDate).toLocaleDateString();
+                    });
+
+                    registrationTablesContainer.appendChild(monthTable);
+                }
+            } catch (error) {
+                console.error('Error fetching registrations:', error);
+            }
+        }
+
+        // Group registrations by month
+        function groupByMonth(registrations) {
+            return registrations.reduce((acc, registration) => {
+                if (!acc[registration.registrationMonth]) {
+                    acc[registration.registrationMonth] = [];
+                }
+                acc[registration.registrationMonth].push(registration);
+                return acc;
+            }, {});
+        }
+
+        // Fetch registrations when the page loads
+        fetchRegistrations();
+    </script>
+</body>
+</html>

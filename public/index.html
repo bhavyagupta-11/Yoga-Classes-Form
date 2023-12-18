@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <title>Yoga Classes Admission Form</title>
+    <style>
+        body {
+            background-color: #f8f9fa; /* Light gray background */
+        }
+
+        .header {
+            background-color: rgb(4, 21, 4); /* Blue header background */
+            color: #fff;
+            padding: 5px;
+            text-align: center;
+        }
+        
+        .dialog-box {
+            max-width: 400px;
+            margin: 50px auto;
+            background-color: #fff; /* White background */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+            border-radius: 5px;
+            padding: 20px;
+        }
+
+        .dialog-box-header {
+            background-color: #7bb4e6; /* Yellow background for header */
+            color: #fff;
+            font-weight: bold;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .form-group label {
+            font-weight: bold;
+        }
+
+        /* Add style for disabled buttons */
+        button:disabled {
+            background-color: #6c757d !important; /* Grey color */
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h6><a href="/view.html" style="color: rgb(240, 234, 234); text-decoration: none;">Registrations</a></h6>
+    </div>
+
+    <div class="container">
+        <div class="dialog-box">
+            <div class="dialog-box-header">
+                <h1>Yoga Classes Admission Form</h1>
+            </div>
+            <form action="/submit" method="post" id="admissionForm">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age:</label>
+                    <input type="number" class="form-control" id="age" name="age" min="18" max="65" required oninput="validateAge()">
+                </div>
+
+                <div class="form-group">
+                    <label for="batch">Select Batch:</label>
+                    <select class="form-control" id="batch" name="selectedBatch" required>
+                        <option value="6-7AM">6-7AM</option>
+                        <option value="7-8AM">7-8AM</option>
+                        <option value="8-9AM">8-9AM</option>
+                        <option value="5-6PM">5-6PM</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment">Payment (INR):</label>
+                    <input type="number" class="form-control" id="payment" name="payment" min="500" max="500" value="500" required disabled>
+                </div>
+
+                <button type="button" class="btn btn-success" id="payButton" onclick="processPayment()" disabled>Pay Now</button>
+                <p id="paymentStatus"></p>
+
+                <button type="submit" class="btn btn-primary" id="submitButton" disabled>Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        function validateAge() {
+            const age = document.getElementById('age').value;
+            const paymentInput = document.getElementById('payment');
+            const payButton = document.getElementById('payButton');
+            const submitButton = document.getElementById('submitButton');
+            const paymentStatus = document.getElementById('paymentStatus');
+
+            if (age >= 18 && age <= 65) {
+                paymentInput.removeAttribute('disabled');
+                payButton.removeAttribute('disabled');
+                submitButton.setAttribute('disabled', 'true');
+                paymentStatus.innerHTML = ''; // Clear payment status
+            } else {
+                paymentInput.setAttribute('disabled', 'true');
+                payButton.setAttribute('disabled', 'true');
+                submitButton.setAttribute('disabled', 'true');
+                paymentStatus.innerHTML = 'Age must be between 18 and 65 to proceed.';
+            }
+        }
+
+        async function processPayment() {
+            const paymentAmount = document.getElementById('payment').value;
+            if (paymentAmount == 500) {
+                try {
+                    const response = await fetch('/processPayment', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ paymentAmount }),
+                    });
+
+                    const result = await response.json();
+
+                    if (result.success) {
+                        document.getElementById('paymentStatus').innerHTML = 'Payment successful!';
+                        document.getElementById('submitButton').removeAttribute('disabled');
+                    } else {
+                        document.getElementById('paymentStatus').innerHTML = 'Payment failed. Please try again.';
+                    }
+                } catch (error) {
+                    console.error('Error processing payment:', error);
+                    document.getElementById('paymentStatus').innerHTML = 'Error processing payment. Please try again later.';
+                }
+            } else {
+                document.getElementById('paymentStatus').innerHTML = 'Invalid payment amount. Please enter 500 INR.';
+            }
+        }
+    </script>
+</body>
+</html>
